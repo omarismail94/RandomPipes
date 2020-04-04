@@ -5,7 +5,7 @@
 results/
 .idea/
 target/
-.*iml
+*.iml
 
 
 # Package Files #
