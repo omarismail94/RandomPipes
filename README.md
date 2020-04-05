@@ -1,7 +1,7 @@
 
 ## Upload Template to Google Storage
 mvn -Pdataflow-runner compile exec:java \
--Dexec.mainClass=org.omar.<class_name> \
+-Dexec.mainClass=org.omar.$CLASS_NAME \
 -Dexec.cleanupDaemonThreads=false \
 -Dexec.args=" \
 --project=$PROJECT_ID \
@@ -20,7 +20,7 @@ gcloud dataflow jobs run $JOB_NAME \
 
 ### To Compile and Run on Dataflow
 mvn -Pdataflow-runner compile exec:java \
-      -Dexec.mainClass=org.omar.KeyWords \
+      -Dexec.mainClass=org.omar.$CLASS_NAME \
       -Dexec.args=" \
       --project=$PROJECT_ID \
       --stagingLocation=gs://$BUCKET_NAME/staging  \
