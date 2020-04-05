@@ -29,4 +29,4 @@ mvn -Pdataflow-runner compile exec:java \
       --runner=DataflowRunner"
       
 ## To Run Locally
-mvn clean compile exec:java -Dexec.mainClass=org.omar.KeyWords "-Dexec.args=--output=results/output/ --inputFile=wordkeys.txt" -f pom.xml
+mvn clean compile exec:java -Dexec.mainClass=org.omar.$CLASS_NAME -Dexec.args="--output=results/output/ --inputFile=wordkeys.txt" -f pom.xml
