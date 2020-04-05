@@ -1,5 +1,5 @@
 
-##Upload Template to Google Storage
+## Upload Template to Google Storage
 mvn -Pdataflow-runner compile exec:java \
 -Dexec.mainClass=org.omar.<class_name> \
 -Dexec.cleanupDaemonThreads=false \
@@ -10,15 +10,15 @@ mvn -Pdataflow-runner compile exec:java \
 --templateLocation=gs://<bucket-name>/templates/<template-name>.json \
 --runner=DataflowRunner"
 
-##Execute on Dataflow
-###If Template Exists on Google Storage
+## Execute on Dataflow
+### If Template Exists on Google Storage
 gcloud dataflow jobs run <job-name> \
 --gcs-location=gs://<bucket-name>/templates/wordkey.json \
 --region=us-central1 \
 --parameters inputFile=gs://<bucket-name>/wordkeys.txt,output=gs://<bucket-name>/results/output/
 
 
-###To Compile and Run on Dataflow
+### To Compile and Run on Dataflow
 mvn -Pdataflow-runner compile exec:java \
       -Dexec.mainClass=org.omar.KeyWords \
       -Dexec.args=" \
@@ -28,5 +28,5 @@ mvn -Pdataflow-runner compile exec:java \
       --inputFile=gs://<bucket-name>/wordkeys.txt \
       --runner=DataflowRunner"
       
-##To Run Locally
+## To Run Locally
 mvn clean compile exec:java -Dexec.mainClass=org.omar.KeyWords "-Dexec.args=--output=results/output/ --inputFile=wordkeys.txt" -f pom.xml
