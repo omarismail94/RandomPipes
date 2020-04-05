@@ -33,7 +33,7 @@ public class AddToInput {
     private static void runAdd(MyOptions options) {
         Pipeline p = Pipeline.create(options);
 
-        p.apply("read the file", TextIO.read().from(options.getInputFile())).
+        p.apply("read the file", TextIO.read().from(options.getInputFile()).withDelimiter(new byte[] {',','\n'})).
                 apply("toInt", ParDo.of(new CovertToInt())).
                 apply("Add", ParDo.of(new AddX())).
                 apply("Convert to String", ParDo.of(new ConvertToString())).
