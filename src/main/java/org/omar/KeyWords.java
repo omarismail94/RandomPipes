@@ -5,7 +5,9 @@ import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.*;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.KV;
+import org.apache.commons.collections4.IterableUtils;
 
+import java.util.List;
 
 public class KeyWords {
 
@@ -32,7 +34,6 @@ public class KeyWords {
                apply(GroupByKey.create()).
                apply(ParDo.of(new FormatAsText())).
                 apply(TextIO.write().to(options.getOutput()));
-
                 p.run().waitUntilFinish();
     }
 
@@ -49,7 +50,9 @@ public class KeyWords {
     public static class FormatAsText extends DoFn<KV<String, Iterable<Integer>>, String> {
         @ProcessElement
           public void processElement(ProcessContext input) {
-            input.output(input.element().getKey() + ": " + input.element().getValue());
+            String key = input.element().getKey();
+            List<Integer> numList = IterableUtils.toList( input.element().getValue());
+            input.output(key + ": " + numList);
         }
     }
 

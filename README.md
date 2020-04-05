@@ -4,28 +4,28 @@ mvn -Pdataflow-runner compile exec:java \
 -Dexec.mainClass=org.omar.<class_name> \
 -Dexec.cleanupDaemonThreads=false \
 -Dexec.args=" \
---project=<project-id> \
---stagingLocation=gs://<bucket-name>/staging \
---tempLocation=gs://<bucket-name>/temp \
---templateLocation=gs://<bucket-name>/templates/<template-name>.json \
+--project=$PROJECT_ID \
+--stagingLocation=gs://$BUCKET_NAME/staging \
+--tempLocation=gs://$BUCKET_NAME/temp \
+--templateLocation=gs://$BUCKET_NAME/templates/$TEMPLATE_NAME.json \
 --runner=DataflowRunner"
 
 ## Execute on Dataflow
 ### If Template Exists on Google Storage
-gcloud dataflow jobs run <job-name> \
---gcs-location=gs://<bucket-name>/templates/wordkey.json \
+gcloud dataflow jobs run $JOB_NAME \
+--gcs-location=gs://$BUCKET_NAME/templates/wordkey.json \
 --region=us-central1 \
---parameters inputFile=gs://<bucket-name>/wordkeys.txt,output=gs://<bucket-name>/results/output/
+--parameters inputFile=gs://$BUCKET_NAME/wordkeys.txt,output=gs://$BUCKET_NAME/results/output
 
 
 ### To Compile and Run on Dataflow
 mvn -Pdataflow-runner compile exec:java \
       -Dexec.mainClass=org.omar.KeyWords \
       -Dexec.args=" \
-      --project=<project-id> \
-      --stagingLocation=gs://<bucket-name>/staging  \
-      --output=gs://<bucket-name>/output \
-      --inputFile=gs://<bucket-name>/wordkeys.txt \
+      --project=$PROJECT_ID \
+      --stagingLocation=gs://$BUCKET_NAME/staging  \
+      --output=gs://$BUCKET_NAME/results/output \
+      --inputFile=gs://$BUCKET_NAME/wordkeys.txt \
       --runner=DataflowRunner"
       
 ## To Run Locally
