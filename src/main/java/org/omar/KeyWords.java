@@ -2,27 +2,21 @@ package org.omar;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
-import org.apache.beam.sdk.options.Default;
-import org.apache.beam.sdk.options.PipelineOptions;
-import org.apache.beam.sdk.options.PipelineOptionsFactory;
-import org.apache.beam.sdk.options.Validation;
+import org.apache.beam.sdk.options.*;
 import org.apache.beam.sdk.transforms.*;
 import org.apache.beam.sdk.values.KV;
 
 
 public class KeyWords {
 
-    public interface MyOptions extends PipelineOptions{
+    public interface MyOptions extends PipelineOptions {
+        @Description("Path of the file to read from")
+        ValueProvider<String> getInputFile();
+        void setInputFile(ValueProvider<String> value);
 
-        @Validation.Required
-        @Default.String("wordkeys.txt")
-        String getInputFile();
-        void setInputFile(String value);
-
-        @Validation.Required
-        @Default.String("results/Euclid")
-        String getOutputDirectory();
-        void setOutputDirectory(String value);
+        @Description("Path of the file to write to")
+        ValueProvider<String> getOutput();
+        void setOutput(ValueProvider<String> value);
     }
 
     public static void main(String[] args) {
@@ -37,7 +31,7 @@ public class KeyWords {
                apply(ParDo.of(new makeKV())).
                apply(GroupByKey.create()).
                apply(ParDo.of(new FormatAsText())).
-                apply(TextIO.write().to(options.getOutputDirectory()));
+                apply(TextIO.write().to(options.getOutput()));
 
                 p.run().waitUntilFinish();
     }
