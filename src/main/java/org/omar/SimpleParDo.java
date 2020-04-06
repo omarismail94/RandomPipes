@@ -10,7 +10,7 @@ import org.apache.beam.sdk.options.Validation;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 
-public class AddToInput {
+public class SimpleParDo {
 
     public interface MyOptions extends PipelineOptions {
         @Validation.Required

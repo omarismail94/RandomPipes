@@ -9,7 +9,7 @@ import org.apache.commons.collections4.IterableUtils;
 
 import java.util.List;
 
-public class KeyWords {
+public class GroupByKeyWords {
 
     public interface MyOptions extends PipelineOptions {
         @Description("Path of the file to read from")
