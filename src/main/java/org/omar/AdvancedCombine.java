@@ -21,8 +21,8 @@ public class AdvancedCombine {
 
         @Validation.Required
         @Default.String("results/AdvComb")
-        ValueProvider<String> getOutputDirectory();
-        void setOutputDirectory(ValueProvider<String> value);
+        ValueProvider<String> getOutput();
+        void setOutput(ValueProvider<String> value);
     }
     public static void main(String[] args) {
         MyOptions options = PipelineOptionsFactory.fromArgs(args).as(MyOptions.class);
@@ -38,7 +38,7 @@ public class AdvancedCombine {
                 apply(ParDo.of(new makeKV())).
                 apply("Combine", Combine.<String,Integer,Double>perKey(new AverageFn())).
                 apply("Convert to String", ParDo.of(new FormatAsText())).
-                apply("output the file", TextIO.write().to(options.getOutputDirectory()));
+                apply("output the file", TextIO.write().to(options.getOutput()));
 
         p.run().waitUntilFinish();
 
