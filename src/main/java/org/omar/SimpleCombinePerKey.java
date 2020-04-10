@@ -9,7 +9,7 @@ import org.apache.commons.collections4.IterableUtils;
 
 import java.util.List;
 
-public class GroupByKeyWords {
+public class SimpleCombinePerKey {
 
     public interface MyOptions extends PipelineOptions {
         @Description("Path of the file to read from")
@@ -18,25 +18,25 @@ public class GroupByKeyWords {
         void setInputFile(ValueProvider<String> value);
 
         @Description("Path of the file to write to")
-        @Default.String("results/GBK")
+        @Default.String("results/SCPK")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }
 
     public static void main(String[] args) {
         MyOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(MyOptions.class);
-        runKeyWords(options);
+        runKeyWordsCombine(options);
     }
 
-    private static void runKeyWords(MyOptions options) {
+    private static void runKeyWordsCombine(MyOptions options) {
         Pipeline p = Pipeline.create(options);
 
         p.apply(TextIO.read().from(options.getInputFile())).
-               apply(ParDo.of(new makeKV())).
-               apply(GroupByKey.create()).
-               apply(ParDo.of(new FormatAsText())).
+                apply(ParDo.of(new makeKV())).
+                apply(Combine.<String,Integer,Integer>perKey(Sum.ofIntegers())).
+                apply(ParDo.of(new FormatAsText())).
                 apply(TextIO.write().to(options.getOutput()));
-                p.run().waitUntilFinish();
+        p.run().waitUntilFinish();
     }
 
     private static class makeKV extends DoFn<String, KV<String,Integer>> {
@@ -49,12 +49,10 @@ public class GroupByKeyWords {
         }
     }
 
-    public static class FormatAsText extends DoFn<KV<String, Iterable<Integer>>, String> {
+    public static class FormatAsText extends DoFn<KV<String, Integer>, String> {
         @ProcessElement
-          public void processElement(ProcessContext input) {
-            String key = input.element().getKey();
-            List<Integer> numList = IterableUtils.toList( input.element().getValue());
-            input.output(key + ": " + numList);
+        public void processElement(ProcessContext input) {
+            input.output(input.element().getKey() + ": " + input.element().getValue().toString());
         }
     }
 

@@ -27,7 +27,7 @@ public class CoGroupByKeys {
         void setPhoneFile(ValueProvider<String> value);
 
         @Description("Path of the file to write to")
-        @Default.String("results/CGBK/")
+        @Default.String("results/CGBK")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }
