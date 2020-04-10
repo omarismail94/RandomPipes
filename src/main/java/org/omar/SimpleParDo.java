@@ -17,8 +17,8 @@ public class SimpleParDo {
 
         @Validation.Required
         @Default.String("results/Newton")
-        ValueProvider<String> getOutputDirectory();
-        void setOutputDirectory(ValueProvider<String> value);
+        ValueProvider<String> getOutput();
+        void setOutput(ValueProvider<String> value);
     }
     public static void main(String[] args) {
         MyOptions options = PipelineOptionsFactory.fromArgs(args).as(MyOptions.class);
@@ -34,7 +34,7 @@ public class SimpleParDo {
                 apply("toInt", ParDo.of(new CovertToInt())).
                 apply("Add", ParDo.of(new AddX())).
                 apply("Convert to String", ParDo.of(new ConvertToString())).
-            apply("output the file", TextIO.write().to(options.getOutputDirectory()));
+            apply("output the file", TextIO.write().to(options.getOutput()));
 
         p.run().waitUntilFinish();
 

@@ -19,8 +19,8 @@ public class SimpleCombine {
 
         @Validation.Required
         @Default.String("results/SC")
-        ValueProvider<String> getOutputDirectory();
-        void setOutputDirectory(ValueProvider<String> value);
+        ValueProvider<String> getOutput();
+        void setOutput(ValueProvider<String> value);
     }
     public static void main(String[] args) {
         MyOptions options = PipelineOptionsFactory.fromArgs(args).as(MyOptions.class);
@@ -36,7 +36,7 @@ public class SimpleCombine {
                 apply("toInt", ParDo.of(new CovertToInt())).
                 apply("addPCollection", Combine.globally(new SumInts())).
                 apply("Convert to String", ParDo.of(new ConvertToString())).
-                apply("output the file", TextIO.write().to(options.getOutputDirectory()));
+                apply("output the file", TextIO.write().to(options.getOutput()));
 
         p.run().waitUntilFinish();
 
