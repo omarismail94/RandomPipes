@@ -13,10 +13,12 @@ public class GroupByKeyWords {
 
     public interface MyOptions extends PipelineOptions {
         @Description("Path of the file to read from")
+        @Default.String("wordkeys.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Description("Path of the file to write to")
+        @Default.String("results/GBK/")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

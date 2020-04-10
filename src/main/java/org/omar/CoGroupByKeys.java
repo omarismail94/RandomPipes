@@ -11,22 +11,23 @@ import org.apache.beam.sdk.transforms.join.KeyedPCollectionTuple;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TupleTag;
-import org.graalvm.compiler.replacements.Snippets;
-import org.w3c.dom.Text;
 
 public class CoGroupByKeys {
 
 
     public interface MyOptions extends PipelineOptions{
         @Description("Path of the email file to read from")
+        @Default.String("emails.txt")
         ValueProvider<String> getEmailFile();
         void setEmailFile(ValueProvider<String> value);
 
         @Description("Path of the phone file to read from")
+        @Default.String("phones.txt")
         ValueProvider<String> getPhoneFile();
         void setPhoneFile(ValueProvider<String> value);
 
         @Description("Path of the file to write to")
+        @Default.String("results/CGBK/")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

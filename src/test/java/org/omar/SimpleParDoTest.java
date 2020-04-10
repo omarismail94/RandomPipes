@@ -20,10 +20,7 @@ import java.util.List;
 
 
 @RunWith(JUnit4.class)
-public class AddInputTest {
-
-
-
+public class SimpleParDoTest {
     @Rule public final transient TestPipeline pipeline = TestPipeline.create();
 
 
@@ -31,13 +28,13 @@ public class AddInputTest {
     @Category(NeedsRunner.class)
     public void testAddInput() throws Exception {
         // Create the test input.
-        AddToInput.MyOptions options = TestPipeline.testingPipelineOptions().as(AddToInput.MyOptions.class);
+        SimpleParDo.MyOptions options = TestPipeline.testingPipelineOptions().as(SimpleParDo.MyOptions.class);
 
         final List<Integer> LINES = Arrays.asList(1,-1,3);
 
 
         PCollection<Integer> compare =  pipeline.apply(Create.of(LINES)).
-                apply(ParDo.of(new AddToInput.AddX()));
+                apply(ParDo.of(new SimpleParDo.AddX()));
 
         PAssert.that(compare).containsInAnyOrder(11,9,13);
 
