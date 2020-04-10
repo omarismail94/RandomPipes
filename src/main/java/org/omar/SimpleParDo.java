@@ -1,3 +1,7 @@
+/*
+Reads numbers.txt file, converts to ints and only takes even numbers, then adds 10 to each of the numbers
+ */
+
 package org.omar;
 
 
@@ -51,7 +55,8 @@ public class SimpleParDo {
     public static class CovertToInt extends DoFn<String, Integer> {
         @ProcessElement
         public void processElement(@Element String stringNum, OutputReceiver<Integer> outNum){
-            outNum.output(Integer.parseInt(stringNum));
+            int testEven = Integer.parseInt(stringNum);
+            if (testEven%2 == 0) outNum.output(testEven);
         }
     }
 
