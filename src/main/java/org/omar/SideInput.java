@@ -3,61 +3,63 @@ package org.omar;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.*;
-import org.apache.beam.sdk.transforms.Combine;
 import org.apache.beam.sdk.transforms.DoFn;
-import org.apache.beam.sdk.transforms.Max;
 import org.apache.beam.sdk.transforms.ParDo;
-import org.apache.beam.sdk.values.PCollection;
-import org.apache.beam.sdk.values.PCollectionView;
+
+/*
+Unlike SimpeParDo, you can add/subtract any number you would like in this class
+ */
 
 public class SideInput {
     public interface MyOptions extends PipelineOptions{
         @Validation.Required
-        @Default.String("bible.txt")
+        @Default.String("numbers.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/James")
+        @Default.Integer(10)
+        ValueProvider<Integer> getAdder();
+        void setAdder(ValueProvider<Integer> value);
+
+        @Validation.Required
+        @Default.String("results/Euclid")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }
 
     public static void main(String[] args) {
-        MyOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(MyOptions.class);
-        runSider(options);
+        MyOptions options = PipelineOptionsFactory.fromArgs(args).as(MyOptions.class);
+        runSidy(options);
     }
 
-    private static void runSider(MyOptions options) {
+    private static void runSidy(MyOptions options) {
         Pipeline p = Pipeline.create(options);
 
-        PCollection<String> wordLines =  p.apply("Read from file", TextIO.read().from(options.getInputFile()));
 
-        PCollection<Integer> wordLengths = wordLines.apply("Calculate Word Length", ParDo.of(new DoFn<String, Integer>() {
-            @ProcessElement
-            public void processElement(@Element String word, OutputReceiver<Integer> lengthy){
-                lengthy.output(word.split("\\s+").length);
-            }
 
-        }));
+        p.apply("read the file", TextIO.read().from(options.getInputFile()).withDelimiter(new byte[] {',','\n'})).
+                apply("toInt", ParDo.of(new CovertToInt())).
+                apply("Add", ParDo.of(new DoFn<Integer, Integer>() {
+                    @ProcessElement
+                    public void processElement(@Element Integer inNum, OutputReceiver<Integer> outNum, PipelineOptions allTheOptions) {
+                        MyOptions opts = allTheOptions.as(MyOptions.class);
+                        outNum.output(inNum + opts.getAdder().get());
+                    }
+                })).
+                apply("Convert to String", ParDo.of(new ConvertToString())).
+                apply("output the file", TextIO.write().to(options.getOutput()).withSuffix(".txt"));
 
-        final PCollectionView<Integer> maxWordLength = wordLengths.apply("Find Max", Combine.globally(Max.ofIntegers()).asSingletonView());
-
-        PCollection<String> wordsBelowCutOff =
-                wordLines.apply("Cutoff", ParDo
-                        .of(new DoFn<String, String>() {
-                            @ProcessElement
-                            public void processElement(@Element String word, OutputReceiver<String> out, ProcessContext c) {
-                                int lengthCutOff = c.sideInput(maxWordLength);
-                                if (word.split("\\s+").length == lengthCutOff) {
-                                    out.output(word);
-                                }
-                            }
-                        }).withSideInputs(maxWordLength)
-                );
-
-        wordsBelowCutOff.apply("Write to disk", TextIO.write().to(options.getOutput()));
         p.run().waitUntilFinish();
+
+    }
+
+
+    public static class CovertToInt extends DoFn<String, Integer> {
+        @ProcessElement
+        public void processElement(@Element String stringNum, OutputReceiver<Integer> outNum){
+            outNum.output(Integer.parseInt(stringNum));
+        }
     }
 
     public static class ConvertToString extends  DoFn<Integer,String> {
@@ -65,6 +67,5 @@ public class SideInput {
         public void processElement(@Element Integer inNum, OutputReceiver<String> outString){
             outString.output(inNum.toString());
         }
-
     }
 }
