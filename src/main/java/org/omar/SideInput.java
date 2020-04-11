@@ -31,9 +31,9 @@ public class SideInput {
     private static void runSider(MyOptions options) {
         Pipeline p = Pipeline.create(options);
 
-        PCollection<String> wordLines =  p.apply(TextIO.read().from(options.getInputFile()));
+        PCollection<String> wordLines =  p.apply("Read from file", TextIO.read().from(options.getInputFile()));
 
-        PCollection<Integer> wordLengths = wordLines.apply(ParDo.of(new DoFn<String, Integer>() {
+        PCollection<Integer> wordLengths = wordLines.apply("Calculate Word Length", ParDo.of(new DoFn<String, Integer>() {
             @ProcessElement
             public void processElement(@Element String word, OutputReceiver<Integer> lengthy){
                 lengthy.output(word.split("\\s+").length);
@@ -41,10 +41,10 @@ public class SideInput {
 
         }));
 
-        final PCollectionView<Integer> maxWordLength = wordLengths.apply(Combine.globally(Max.ofIntegers()).asSingletonView());
+        final PCollectionView<Integer> maxWordLength = wordLengths.apply("Find Max", Combine.globally(Max.ofIntegers()).asSingletonView());
 
         PCollection<String> wordsBelowCutOff =
-                wordLines.apply(ParDo
+                wordLines.apply("Cutoff", ParDo
                         .of(new DoFn<String, String>() {
                             @ProcessElement
                             public void processElement(@Element String word, OutputReceiver<String> out, ProcessContext c) {
@@ -56,7 +56,7 @@ public class SideInput {
                         }).withSideInputs(maxWordLength)
                 );
 
-        wordsBelowCutOff.apply(TextIO.write().to(options.getOutput()));
+        wordsBelowCutOff.apply("Write to disk", TextIO.write().to(options.getOutput()));
         p.run().waitUntilFinish();
     }
 
