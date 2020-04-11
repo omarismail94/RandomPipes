@@ -23,7 +23,7 @@ public class SimpleCombine {
         void setOutput(ValueProvider<String> value);
     }
     public static void main(String[] args) {
-        MyOptions options = PipelineOptionsFactory.fromArgs(args).as(MyOptions.class);
+        MyOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(MyOptions.class);
         runCombine(options);
 
     }
