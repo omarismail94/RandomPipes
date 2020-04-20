@@ -43,7 +43,7 @@ public class StreamyWindow {
                         for(Long item: input.element().getValue()){
                             count++;
                         }
-                        LOG.error(Integer.toString(count));
+                        LOG.info(Integer.toString(count));
                     }
                 }));
 
