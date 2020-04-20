@@ -16,25 +16,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class BatchyWindow {
+public class StreamyWindow {
     public interface MyOptions extends PipelineOptions {
     }
 
     public static void main(String[] args) {
         MyOptions options = PipelineOptionsFactory.fromArgs(args).withValidation().as(MyOptions.class);
-        runBatchy(options);
+        runStreamy(options);
     }
 
-    private static void runBatchy(MyOptions options) {
-        final Logger LOG = LoggerFactory.getLogger(BatchyBatch.class);
+    private static void runStreamy(MyOptions options) {
+        final Logger LOG = LoggerFactory.getLogger(StreamyWindow.class);
 
 
         Pipeline p = Pipeline.create(options);
 
-        PCollection<Long> omar =  p.apply(GenerateSequence.from(1).to(1000000000)).
+        p.apply(GenerateSequence.from(1).to(1000000000)).
                 apply(WithTimestamps.of( (Long record) -> new Instant(System.currentTimeMillis()))).
                 apply(WithKeys.<String,Long>of("000").withKeyType(TypeDescriptors.strings())).
-                apply(Window.into(FixedWindows.of(Duration.standardSeconds(5)))).
+                apply(Window.into(FixedWindows.of(Duration.standardSeconds(1)))).
                 apply(GroupIntoBatches.ofSize(100)).
                 apply(ParDo.of(new DoFn<KV<String, Iterable<Long>>, Long>() {
                     @ProcessElement
