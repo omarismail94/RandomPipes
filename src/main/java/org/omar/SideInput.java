@@ -57,7 +57,7 @@ public class SideInput {
                 );
 
         wordsBelowCutOff.apply("Write to disk", TextIO.write().to(options.getOutput()));
-        p.run().waitUntilFinish();
+        p.run();
     }
 
     public static class ConvertToString extends  DoFn<Integer,String> {

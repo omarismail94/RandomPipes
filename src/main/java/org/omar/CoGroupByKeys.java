@@ -69,7 +69,7 @@ public class CoGroupByKeys {
 
         contactLines.apply(TextIO.write().to(options.getOutput()));
 
-        pipeline.run().waitUntilFinish();
+        pipeline.run();
     }
 
 

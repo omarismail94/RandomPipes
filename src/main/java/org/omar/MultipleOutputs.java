@@ -66,7 +66,7 @@ public class MultipleOutputs {
         merged.apply("Write Good", TextIO.write().to(options.getGood()));
         wordJudas.apply("Write Bad", TextIO.write().to(options.getBad()));
 
-        p.run().waitUntilFinish();
+        p.run();
     }
 
 }

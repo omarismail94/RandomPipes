@@ -40,7 +40,7 @@ public class AdvancedCombine {
                 apply("Convert to String", ParDo.of(new FormatAsText())).
                 apply("output the file", TextIO.write().to(options.getOutput()));
 
-        p.run().waitUntilFinish();
+        p.run();
 
     }
 

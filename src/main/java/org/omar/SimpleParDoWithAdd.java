@@ -50,7 +50,7 @@ public class SimpleParDoWithAdd {
                 apply("Convert to String", ParDo.of(new ConvertToString())).
                 apply("output the file", TextIO.write().to(options.getOutput()).withSuffix(".txt"));
 
-        p.run().waitUntilFinish();
+        p.run();
 
     }
 

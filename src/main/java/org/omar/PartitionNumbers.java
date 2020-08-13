@@ -3,14 +3,20 @@ Partitions numbers.txt based on whether the element is even or odd
  */
 package org.omar;
 
+import static org.apache.beam.sdk.transforms.Partition.PartitionFn;
+import static org.apache.beam.sdk.transforms.Partition.of;
+
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
-import org.apache.beam.sdk.options.*;
+import org.apache.beam.sdk.options.Default;
+import org.apache.beam.sdk.options.PipelineOptions;
+import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.sdk.options.Validation;
+import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionList;
-import static org.apache.beam.sdk.transforms.Partition.*;
 
 public class PartitionNumbers {
 
@@ -55,7 +61,7 @@ public class PartitionNumbers {
         oddBob.apply("Convert to String", ParDo.of(new ConvertToString())).
                 apply("output the file", TextIO.write().to(options.getOddOutput()));
 
-        p.run().waitUntilFinish();
+        p.run();
     }
 
     public static class CovertToInt extends DoFn<String, Integer> {

@@ -40,7 +40,7 @@ public class SimpleParDo {
                 apply("Convert to String", ParDo.of(new ConvertToString())).
             apply("output the file", TextIO.write().to(options.getOutput()));
 
-        p.run().waitUntilFinish();
+        p.run();
 
     }
 
