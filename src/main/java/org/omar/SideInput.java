@@ -13,12 +13,10 @@ import org.apache.beam.sdk.values.PCollectionView;
 public class SideInput {
     public interface MyOptions extends PipelineOptions{
         @Validation.Required
-        @Default.String("bible.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/James")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

@@ -15,12 +15,10 @@ public class AdvancedCombine {
 
     public interface MyOptions extends PipelineOptions {
         @Validation.Required
-        @Default.String("wordkeys.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/AdvComb")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

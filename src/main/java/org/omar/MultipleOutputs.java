@@ -14,17 +14,14 @@ Multiple Outputs from DoFn, then combine 2 PCollections, outputting to a file, a
 public class MultipleOutputs {
     public interface MyOptions extends PipelineOptions{
         @Validation.Required
-        @Default.String("bible.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/TheWord")
         ValueProvider<String> getGood();
         void setGood(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/TheBad")
         ValueProvider<String> getBad();
         void setBad(ValueProvider<String> value);
     }

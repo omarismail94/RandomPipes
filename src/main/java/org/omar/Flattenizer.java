@@ -18,17 +18,14 @@ public class Flattenizer {
 
     public interface MyOptions extends PipelineOptions{
         @Description("Path of the email file to read from")
-        @Default.String("emails.txt")
         ValueProvider<String> getEmailFile();
         void setEmailFile(ValueProvider<String> value);
 
         @Description("Path of the phone file to read from")
-        @Default.String("phones.txt")
         ValueProvider<String> getPhoneFile();
         void setPhoneFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/Flat")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
 

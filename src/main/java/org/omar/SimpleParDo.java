@@ -15,12 +15,10 @@ public class SimpleParDo {
 
     public interface MyOptions extends PipelineOptions {
         @Validation.Required
-        @Default.String("numbers.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/Newton")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

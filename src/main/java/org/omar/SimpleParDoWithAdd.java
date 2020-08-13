@@ -13,7 +13,6 @@ Unlike SimpeParDo, you can add/subtract any number you would like in this class
 public class SimpleParDoWithAdd {
     public interface MyOptions extends PipelineOptions{
         @Validation.Required
-        @Default.String("numbers.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
@@ -23,7 +22,6 @@ public class SimpleParDoWithAdd {
         void setAdder(ValueProvider<Integer> value);
 
         @Validation.Required
-        @Default.String("results/Euclid")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

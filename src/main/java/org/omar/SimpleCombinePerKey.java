@@ -2,7 +2,6 @@ package org.omar;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
-import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
@@ -17,12 +16,10 @@ public class SimpleCombinePerKey {
 
     public interface MyOptions extends PipelineOptions {
         @Description("Path of the file to read from")
-        @Default.String("wordkeys.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Description("Path of the file to write to")
-        @Default.String("results/SCPK")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

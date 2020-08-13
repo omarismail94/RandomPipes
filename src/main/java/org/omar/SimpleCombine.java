@@ -13,12 +13,10 @@ public class SimpleCombine {
 
     public interface MyOptions extends PipelineOptions {
         @Validation.Required
-        @Default.String("numbers.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/SC")
         ValueProvider<String> getOutput();
         void setOutput(ValueProvider<String> value);
     }

@@ -8,7 +8,6 @@ import static org.apache.beam.sdk.transforms.Partition.of;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
-import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.options.Validation;
@@ -22,17 +21,14 @@ public class PartitionNumbers {
 
     public interface MyOptions extends PipelineOptions{
         @Validation.Required
-        @Default.String("numbers.txt")
         ValueProvider<String> getInputFile();
         void setInputFile(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/Even")
         ValueProvider<String> getEvenOutput();
         void setEvenOutput(ValueProvider<String> value);
 
         @Validation.Required
-        @Default.String("results/Oddy")
         ValueProvider<String> getOddOutput();
         void setOddOutput(ValueProvider<String> value);
 
