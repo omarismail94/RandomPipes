@@ -21,3 +21,6 @@ target/
 
 build/
 .gradle/
+.factorypath
+.classpath
+.project
